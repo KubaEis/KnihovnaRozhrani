@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 
@@ -13,9 +14,10 @@ public class KnihaController {
     @FXML
     private ListView<Kniha> knihaListView;
     @FXML
-    Label titulLabel, autorLabel, rokLabel;
+    Label titulLabel, autorLabel, rokLabel, errors;
     @FXML
     TextField titulField, autorField, rokField, vyhledavani;
+
 
 
     public void initialize() {
@@ -40,15 +42,20 @@ public class KnihaController {
 
     @FXML
     private void handlePridejKnihu() {
-        String titul = titulField.getText();
-        String autor = autorField.getText();
-        int rok = Integer.parseInt(rokField.getText());
+        try{
+            String titul = titulField.getText();
+            String autor = autorField.getText();
+            int rok = Integer.parseInt(rokField.getText());
 
-        Kniha nova = new Kniha(titul, autor, rok);
-        knihaListView.getItems().add(nova);
-        titulField.setText("");
-        autorField.setText("");
-        rokField.setText("");
+            Kniha nova = new Kniha(titul, autor, rok);
+            knihaListView.getItems().add(nova);
+            titulField.setText("");
+            autorField.setText("");
+            rokField.setText("");
+        }catch(Exception e){
+            errors.setText(e.getMessage());
+        }
+
     }
     @FXML
     private void handleOdeberKnihu() {
@@ -62,13 +69,14 @@ public class KnihaController {
     private void handleUpravKnihu() {
         Kniha vybrana = knihaListView.getSelectionModel().getSelectedItem();
         if (vybrana != null) {
-            titulField.setText(vybrana.getTitul());
-            autorField.setText(vybrana.getAutor());
-            rokField.setText(String.valueOf(vybrana.getRokVydani()));
-            vybrana.setTitul(titulField.getText());
-            vybrana.setAutor(autorField.getText());
-            vybrana.setRokVydani(Integer.parseInt(rokField.getText()));
-            knihaListView.refresh();
+            try{
+                vybrana.setTitul(titulField.getText());
+                vybrana.setAutor(autorField.getText());
+                vybrana.setRokVydani(Integer.parseInt(rokField.getText()));
+                knihaListView.refresh();
+            }catch(Exception e){
+                errors.setText(e.getMessage());
+            }
         }
     }
     @FXML
