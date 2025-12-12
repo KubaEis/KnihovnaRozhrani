@@ -10,10 +10,13 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 
 public class KnihaController {
-    @FXML private ListView<Kniha> knihaListView;
-    @FXML Label titulLabel, autorLabel, rokLabel;
     @FXML
-    TextField titulField, autorField, rokField;
+    private ListView<Kniha> knihaListView;
+    @FXML
+    Label titulLabel, autorLabel, rokLabel;
+    @FXML
+    TextField titulField, autorField, rokField, vyhledavani;
+
 
     public void initialize() {
         Kniha kniha = new Kniha("Pepa", "Honza", 2015);
@@ -29,9 +32,9 @@ public class KnihaController {
     public void handleVyberKnihu() {
         Kniha vybrana = knihaListView.getSelectionModel().getSelectedItem();
         if (vybrana != null) {
-            titulLabel.setText("Titul: " + vybrana.getTitul());
-            autorLabel.setText("Autor: " + vybrana.getAutor());
-            rokLabel.setText("Rok: " + vybrana.getRokVydani());
+            titulLabel.setText(vybrana.getTitul());
+            autorLabel.setText(vybrana.getAutor());
+            rokLabel.setText(String.valueOf(vybrana.getRokVydani()));
         }
     }
 
@@ -43,6 +46,41 @@ public class KnihaController {
 
         Kniha nova = new Kniha(titul, autor, rok);
         knihaListView.getItems().add(nova);
+        titulField.setText("");
+        autorField.setText("");
+        rokField.setText("");
+    }
+    @FXML
+    private void handleOdeberKnihu() {
+        Kniha vybrana = knihaListView.getSelectionModel().getSelectedItem();
+        if (vybrana != null) {
+            knihaListView.getItems().remove(vybrana);
+        }
+    }
+
+    @FXML
+    private void handleUpravKnihu() {
+        Kniha vybrana = knihaListView.getSelectionModel().getSelectedItem();
+        if (vybrana != null) {
+            titulField.setText(vybrana.getTitul());
+            autorField.setText(vybrana.getAutor());
+            rokField.setText(String.valueOf(vybrana.getRokVydani()));
+            vybrana.setTitul(titulField.getText());
+            vybrana.setAutor(autorField.getText());
+            vybrana.setRokVydani(Integer.parseInt(rokField.getText()));
+            knihaListView.refresh();
+        }
+    }
+    @FXML
+    private void handleNajdiKnihu() {
+        String hledany = vyhledavani.getText().toLowerCase();
+        for(Kniha k : knihaListView.getItems()) {
+            if (k.getTitul().toLowerCase().contains(hledany)) {
+                knihaListView.getSelectionModel().select(k);
+                handleVyberKnihu();
+                break;
+            }
+        }
     }
 }
 /*package com.example.demolistview.controller;

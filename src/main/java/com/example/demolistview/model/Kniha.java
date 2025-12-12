@@ -23,6 +23,18 @@ public class Kniha {
         return rokVydani;
     }
 
+    public void setTitul(String titul) {
+        this.titul = titul;
+    }
+
+    public void setRokVydani(int rokVydani) {
+        this.rokVydani = rokVydani;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
     @Override
     public String toString() {
         return titul;
